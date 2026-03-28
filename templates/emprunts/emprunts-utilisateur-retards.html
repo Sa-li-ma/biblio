@@ -1,0 +1,74 @@
+<!-- utilisateurs-liste.html -->
+
+{% extends "../base.html" %}
+
+{% load static %}
+{% block title %}
+  Liste des emprunts
+{% endblock title %}
+
+
+{% block page_title %}
+  Gestion des utilisateurs
+{% endblock page_title %}
+
+
+{% block content %}
+          <section class="commands" >
+            <div class="container d-flex align-items-center justify-content-between">
+                
+                <a href="{% url 'details-utilisateur' utilisateur.id %}" class="button2"><span class="bi bi-arrow-left-square-fill"></span></a>
+                    <h3>{{utilisateur.prenom}} {{utilisateur.nom}}</h3>
+                <a href="{% url 'emprunts-utilisateur' utilisateur.id %}" class="button2" >
+                    <span class="bi bi-plus-square-fill"></span>
+                </a>
+
+            </div>
+         </section>
+        <section class="utilisateurs-tab">
+            
+            <div class="container">
+                <p> {{message}} </p>
+                <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col">Livre</th>
+                    <th scope="col">Date d'emprunt</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Date de retour prévue</th>
+                   
+                    
+                    <th scope="col">Actions</th>
+                    </tr>
+                </thead> 
+                <tbody>
+                   
+                   {% for emprunt in emprunts  %}
+                    <!-- ==========================MODALS======================================= -->
+                    
+                    
+                    <!-- ==========================FIN MODALS======================================= -->
+      
+    
+                    <tr>
+                    <th scope="row"> {{emprunt.id}} </th>
+                    <td> {{emprunt.livre.titre}} </td>
+                    <td> {{emprunt.date_emprunt}} </td>
+                    <td> {{emprunt.statut}} </td>
+                    <td> {{emprunt.date_retour_prevue}} </td>
+                    <td>
+                        <a href="{% url 'retour-via-utilisateur' emprunt.id %}" class="button2"> Retourner</a>
+                    </td>
+                    
+                    
+                    
+                    </tr>
+                    {% endfor %}
+                                        
+                
+                </tbody>
+            </table>
+            </div>
+        </section>
+{% endblock content %}

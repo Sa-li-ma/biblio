@@ -1,0 +1,38 @@
+<!-- livres-liste.html -->
+
+{% extends "../base.html" %}
+
+{% load static %}
+{% block title %}
+  Modifier
+{% endblock title %}
+
+
+{% block page_title %}
+  Gestion des livres
+{% endblock page_title %}
+
+
+{% block content %}
+
+<div class="container d-flex justify-content-center mt-5">
+    
+
+    <div class="col-md-6 col-lg-5">
+        <a href="{% url 'liste-livres' %}" > <span class="bi bi-x-lg button2"></span></a>
+        <form action="" method="post" class="p-4 border rounded shadow-sm bg-light">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button class="button1 w-100" type="submit">
+                Modifier
+            </button>
+            
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock content %}

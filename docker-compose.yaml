@@ -1,0 +1,52 @@
+services:
+  db-service:
+    image: postgres:17
+    container_name: postgres-server-deploy
+    environment:
+      POSTGRES_DB: db_biblio
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - employedata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db_biblio"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  pgadmin-service:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin-deploy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin1234
+    ports:
+      - "8081:80"
+    depends_on:
+      db-service:
+        condition: service_healthy
+    restart: always
+
+  backend-service:
+    build: .
+    container_name: biblio
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db-service
+    depends_on:
+      db-service:
+        condition: service_healthy
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    restart: always
+
+volumes:
+  employedata:
