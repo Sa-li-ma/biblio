@@ -4,7 +4,7 @@ FROM jenkins/jenkins:lts
 # Passer en root pour installer des paquets
 USER root
 
-# Installer dépendances et git, sudo, python3
+# Installer dépendances, git, sudo, python3
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -26,12 +26,11 @@ RUN curl -fsSL https://get.docker.com -o get-docker.sh \
 RUN curl -SL https://github.com/docker/compose/releases/download/v2.30.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose \
  && chmod +x /usr/local/bin/docker-compose
 
-# Créer groupe docker si nécessaire et ajouter Jenkins
-RUN groupadd -g 999 docker || true \
- && usermod -aG docker jenkins
+# Assurer que Jenkins a accès à Docker
+RUN usermod -aG docker jenkins
 
-# Repasser à l'utilisateur Jenkins
-USER jenkins
+# Laisser Jenkins en root pour éviter les problèmes de permissions avec le socket Docker
+USER root
 
 # Exposer les ports Jenkins
 EXPOSE 8080 50000

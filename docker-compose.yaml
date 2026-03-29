@@ -51,11 +51,11 @@ services:
     restart: always
 
   jenkins-service:
-    image: jenkins-docker
-    container_name: jenkins-deploy
-    user: root
+    build: ./jenkins
+    container_name: jenkins
+    user: root    # <- ici
     ports:
-      - "8084:8080"
+      - "8083:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
