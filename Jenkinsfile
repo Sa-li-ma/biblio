@@ -9,34 +9,14 @@ pipeline {
 
         stage('Cloner le projet') {
             steps {
-                deleteDir() // Nettoyer workspace
+                deleteDir() 
                 git url: 'https://github.com/Sa-li-ma/biblio.git', branch: 'main'
             }
         }
 
-        stage('Build Docker') {
-            steps {
-                sh 'docker-compose build'
-            }
-        }
+       
 
-        stage('Lancer les conteneurs') {
-            steps {
-                sh 'docker-compose up -d'
-            }
-        }
-
-        stage('Migrations Django') {
-            steps {
-                sh 'docker-compose exec -T backend-service python manage.py migrate'
-            }
-        }
-
-        stage('Tests (optionnel)') {
-            steps {
-                sh 'docker-compose exec -T backend-service python manage.py test || true'
-            }
-        }
+        
     }
 
     post {
