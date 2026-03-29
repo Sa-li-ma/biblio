@@ -53,7 +53,7 @@ services:
   jenkins-service:
     build: ./jenkins
     container_name: jenkins
-    user: root    # <- ici
+    user: root    
     ports:
       - "8083:8080"
       - "50000:50000"
