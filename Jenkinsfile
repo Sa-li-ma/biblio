@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        COMPOSE_PROJECT_NAME = "biblio_project"
+    }
+
     stages {
 
         stage('Cloner le projet') {
@@ -11,35 +15,40 @@ pipeline {
 
         stage('Build Docker') {
             steps {
-                sh 'docker-compose build'
+                // Utilisation de docker-compose en mode root si nécessaire
+                sh 'sudo docker-compose build'
             }
         }
 
         stage('Lancer les conteneurs') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'sudo docker-compose up -d'
             }
         }
 
         stage('Migrations Django') {
             steps {
-                sh 'docker exec biblio python manage.py migrate'
+                // Exécuter les migrations Django dans le conteneur backend
+                sh 'sudo docker-compose exec -T backend-service python manage.py migrate'
             }
         }
 
         stage('Tests (optionnel)') {
             steps {
-                sh 'docker exec biblio python manage.py test || true'
+                // Exécuter les tests Django (ignore les erreurs pour ne pas bloquer le pipeline)
+                sh 'sudo docker-compose exec -T backend-service python manage.py test || true'
             }
         }
     }
 
     post {
         success {
-            echo ' Pipeline réussie !'
+            echo 'Pipeline réussie !'
         }
         failure {
             echo ' Pipeline échouée'
+            // Optionnel : arrêter et supprimer les conteneurs si échec
+            sh 'sudo docker-compose down'
         }
     }
 }
