@@ -47,17 +47,17 @@ services:
       python manage.py runserver 0.0.0.0:8000
       "
     restart: always
-    jenkins-service:
-      image: jenkins-docker  # ton image personnalisée avec docker & docker-compose installés
-      container_name: jenkins
-      user: root
-      ports:
-        - "8083:8080"
-        - "50000:50000"
-      volumes:
-        - jenkins_home:/var/jenkins_home
-        - /var/run/docker.sock:/var/run/docker.sock
-      restart: always
+  jenkins-service:
+    image: jenkins-docker  # ton image personnalisée avec docker & docker-compose installés
+    container_name: jenkins
+    user: root
+    ports:
+      - "8083:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
 
 volumes:
   employedata:
