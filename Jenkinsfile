@@ -32,7 +32,7 @@ pipeline {
             }
         }
 
-        stage('Tests (optionnel)') {
+        stage('Tests') {
             steps {
                 sh 'docker-compose exec -T backend-service python manage.py test || true'
             }

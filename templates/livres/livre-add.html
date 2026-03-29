@@ -20,8 +20,8 @@
 
     <div class="col-md-6 col-lg-5">
         <a href="{% url 'liste-livres' %}" > <span class="bi bi-x-lg button2"></span></a>
-        <a href="#">Ajouter un auteur</a> /
-        <a href="#">Ajouter un genre de livre</a>
+        <a href="{% url 'create-auteur' %}">Ajouter un auteur</a> /
+        <a href="{% url 'create-genre' %}">Ajouter un genre de livre</a>
         <form action="" method="post" class="p-4 border rounded shadow-sm bg-light ">
             {% csrf_token %}
 

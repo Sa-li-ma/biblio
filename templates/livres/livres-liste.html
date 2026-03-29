@@ -20,7 +20,7 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     <input type="text" placeholder="rechercher" name="recherche">
-                    <button type="submit">Chercher</button>
+                    <button type="submit" class="button2">Chercher</button>
                 </form>
 
                 <a href="{% url 'create-livre'  %}" class="button2" >

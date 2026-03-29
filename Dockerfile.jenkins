@@ -29,7 +29,7 @@ RUN curl -SL https://github.com/docker/compose/releases/download/v2.30.0/docker-
 # Assurer que Jenkins a accès à Docker
 RUN usermod -aG docker jenkins
 
-# Laisser Jenkins en root pour éviter les problèmes de permissions avec le socket Docker
+# Jenkins en root pour éviter les problèmes de permissions avec le socket Docker
 USER root
 
 # Exposer les ports Jenkins

@@ -17,7 +17,15 @@
           <section class="commands" id="#gestion-utilisateur">
             <div class="container d-flex align-items-center justify-content-between">
                 
-                <h3 class="mb-0"></h3>
+                <div class="container d-flex align-items-center justify-content-between">
+                
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" placeholder="rechercher" name="recherche">
+                    <button type="submit" class="button2">Chercher</button>
+                </form>
+
+                
 
                 <a href="{% url 'create-utilisateur'  %}" class="button2" >
                     <span class="bi bi-plus-square-fill"></span>

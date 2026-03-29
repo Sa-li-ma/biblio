@@ -61,3 +61,42 @@ class LivreForm(forms.ModelForm):
         ]
 
          
+class AuteurForm(forms.ModelForm):
+
+   
+    nom = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder":'Nom complet de l\'auteur'}),
+        required=True
+    )
+    
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "form-control", "placeholder":'Description'}),
+        required=False
+    )
+    class Meta:
+        model = Auteur
+        fields = [
+            'nom',
+            'description'
+        ]
+
+class GenreForm(forms.ModelForm):
+
+   
+    nom = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder":'Genre'}),
+        required=True
+    )
+    
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "form-control", "placeholder":'Description'}),
+        required=False
+    )
+    class Meta:
+        model = Genre
+        fields = [
+           'nom',
+            'description'
+        ]
+
+         

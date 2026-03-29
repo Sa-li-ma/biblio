@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from emprunts.forms import *
+from django.db.models import Q
 
 def success_view(request):
 
@@ -30,7 +31,19 @@ def details_utilisateur(request, id):
     return render(request,"utilisateurs/utilisateur-details.html",context)
 
 def read_utilisateurs(request):
-    utilisateurs = Utilisateur.objects.all()
+    if request.method == "POST":
+        mots = request.POST.get("recherche", "").split()
+        champs = ["matricule", "prenom", "nom", "statut"]
+
+        filtre = Q()
+
+        for mot in mots:
+            for champ in champs:
+                filtre |= Q(**{f"{champ}__icontains": mot})
+
+        utilisateurs = Utilisateur.objects.filter(filtre)
+    else :
+        utilisateurs = Utilisateur.objects.all()
     context = {
         "utilisateurs":utilisateurs
     }

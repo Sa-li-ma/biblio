@@ -7,7 +7,7 @@ from .forms import *
 from django.contrib import messages
 from datetime import date
 from django.db.models import Q, F
-
+ 
 def emprunter_via_utilisateur(request, id):
     message = ""
     utilisateur = get_object_or_404(Utilisateur, pk=id)
@@ -30,6 +30,7 @@ def emprunter_via_utilisateur(request, id):
                             livre.save()
                         emprunt.utilisateur = utilisateur
                         emprunt.save()
+                        messages.success(request,"Emprunt ajouté avec succès !")
                         return redirect("emprunts-utilisateur", id=utilisateur.id)
                     else:
                         messages.error(request,f"Cet utilisateur a un statut {utilisateur.statut} il ne peut avoir plus de {reponse["nbr_emprunt"]} emprunts.\nQuota atteint. ")
@@ -59,17 +60,17 @@ def emprunts_historiques(request,id):
     return render(request,"emprunts/emprunts-historiques.html", context)
 
 def emprunts_utilisateur(request,id):
-    message = top_5_livres()
+    
     utilisateur = get_object_or_404(Utilisateur,pk=id)
     emprunts = Emprunt.objects.filter(utilisateur=utilisateur, date_retour__isnull=True)
     tday = date.today()
     retards = Emprunt.objects.filter(utilisateur=utilisateur, date_retour__isnull=True, date_retour_prevue__lt=tday).count()
-    print(f"##### {message} #####")
+   
     context = {
         "utilisateur": utilisateur,
         "emprunts":emprunts,
         "retards": retards,
-        "message":message
+        
     }
     return render(request,"emprunts/emprunts-utilisateur.html", context)
 
@@ -103,7 +104,7 @@ def retourner_via_utilisateur(request, id):
             emprunt.statut = "retourne"
         emprunt.save()
 
-        message = "Livre retourné avec succès."
+        messages.success(request,"Livre retourné avec succès !")
     emprunts = Emprunt.objects.filter(utilisateur=utilisateur, date_retour__isnull=True)
     context = {
         "utilisateur": utilisateur,
@@ -118,14 +119,14 @@ def top_5_livres():
     livres = Livre.objects.annotate(nbr_emprunt=Count("emprunts")).order_by("-nbr_emprunt")[:5]
     liste = [{"rang":i+1,"titre":livre.titre,"auteur":livre.auteur,"genre":livre.genre,"nbr_emprunt":livre.nbr_emprunt} for i,livre in enumerate(livres)]
     return liste
-    
+     
 def dashboard(request):
     nb_livres = Livre.objects.count()
     nb_utilisateurs = Utilisateur.objects.count()
     nb_emprunts = Emprunt.objects.count()
     top_5 = top_5_livres()
     tday = date.today()
-    emprunts_encours = Emprunt.objects.filter(date_retour__isnull=True, date_retour_prevue__lt=tday).count()
+    emprunts_encours = Emprunt.objects.filter(date_retour__isnull=True).count()
     emprunts_retads = Emprunt.objects.filter(date_retour__gt=F("date_retour_prevue")).count()
     
     context = {
