@@ -1,0 +1,35 @@
+# Utiliser l'image officielle Jenkins LTS
+FROM jenkins/jenkins:lts
+
+# Passer en root pour installer des paquets
+USER root
+
+# Installer Docker et dépendances
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    git \
+    sudo \
+    python3 \
+    python3-pip \
+ && rm -rf /var/lib/apt/lists/*
+
+# Installer Docker (binaire officiel)
+RUN curl -fsSL https://get.docker.com -o get-docker.sh \
+ && sh get-docker.sh
+
+# Installer Docker Compose (binaire officiel)
+RUN curl -SL https://github.com/docker/compose/releases/download/v2.30.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose \
+ && chmod +x /usr/local/bin/docker-compose
+
+# Ajouter Jenkins au groupe docker
+RUN usermod -aG docker jenkins
+
+# Repasser à l'utilisateur Jenkins
+USER jenkins
+
+# Expose Jenkins
+EXPOSE 8080 50000
