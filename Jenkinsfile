@@ -5,7 +5,7 @@ pipeline {
 
         stage('Cloner le projet') {
             steps {
-                git 'https://github.com/Sa-li-ma/biblio.git'
+                git branch: 'main', url: 'https://github.com/Sa-li-ma/biblio.git'
             }
         }
 
