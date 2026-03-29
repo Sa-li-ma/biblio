@@ -14,9 +14,29 @@ pipeline {
             }
         }
 
-       
+        stage('Build Docker') {
+            steps {
+                sh 'docker-compose build'
+            }
+        }
 
-        
+        stage('Lancer les conteneurs') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
+
+        stage('Migrations Django') {
+            steps {
+                sh 'docker-compose exec -T backend-service python manage.py migrate'
+            }
+        }
+
+        stage('Tests (optionnel)') {
+            steps {
+                sh 'docker-compose exec -T backend-service python manage.py test || true'
+            }
+        }
     }
 
     post {
